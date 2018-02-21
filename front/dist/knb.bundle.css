@@ -2039,12 +2039,12 @@ ul.breadcrumbs {
     clip-path: inset(100%) !important;
     overflow: hidden !important; } }
 
-/* 
+/*
 sm - 480px
 md- 768
 */
 html, body {
-  height: calc(100% - 44px); }
+  /*  height:calc(100% - 44px); */ }
 
 #central-form {
   display: flex;
@@ -2059,7 +2059,8 @@ html, body {
   align-items: center;
   height: 100%;
   width: 100%;
-  justify-content: center; }
+  justify-content: center;
+  margin-top: 80px; }
 
 .input-toolbar {
   /* background-color: orange; */

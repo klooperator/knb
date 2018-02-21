@@ -1,4 +1,6 @@
 const https = require("https");
+const Coins = require("../db").Coins;
+const moment = require("moment");
 
 const getGetParamsAsString = getObj => {
   let out = "?";
@@ -64,8 +66,44 @@ const getHistorical = query => {
   });
 };
 
+const findQuery = name => {
+  return Coins.find({
+    where: {
+      name
+    }
+  });
+};
+const saveCoinQuery = (name, data, query) => {
+  return Coins.create({
+    name,
+    data,
+    query
+  });
+};
+
+const costructDBName = query => {
+  const f = "YYYY-MM-DD";
+  const day1 = moment(parseInt(query.ts, 10));
+  const d1 = day1.format(f);
+  const dayLast = day1.add(query.limit, "days").format(f);
+  return `${query.fsym}-${query.tsym}_${d1}-${dayLast}`;
+};
+
+const getAllCoinQueries = () => {
+  return Coins.findAll();
+};
+
+const updateDb = (name, data, query) => {
+  return Coins.update(data, { where: { name } });
+};
+
 module.exports = {
   getCoinList,
   parseList,
-  getHistorical
+  getHistorical,
+  findQuery,
+  saveCoinQuery,
+  costructDBName,
+  getAllCoinQueries,
+  updateDb
 };

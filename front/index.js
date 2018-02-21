@@ -17,13 +17,6 @@ api.setBaseOptions({
 });
 api.setEndpoints(calls);
 
-api
-  .ping()
-  .then(r => r.text())
-  .then((t) => {
-    console.log(t);
-  });
-
 const CENTRAL_NODE = document.getElementById('app');
 
 const renderApp = () => {

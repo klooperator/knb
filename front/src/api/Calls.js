@@ -9,4 +9,7 @@ export default {
   historical: {
     url: `${route}/historcal`,
   },
+  get_from_db: {
+    url: `${route}/get_from_db`,
+  },
 };

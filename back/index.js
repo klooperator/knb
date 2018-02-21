@@ -3,6 +3,7 @@ const logger = require("morgan");
 const bParser = require("body-parser");
 const http = require("http");
 const cors = require("cors");
+const sequelize = require("./src/db");
 
 const router = require("./src/routes/Routes");
 

@@ -21,19 +21,87 @@ const coinList = async (req, res) => {
 };
 
 const ping = async (req, res) => {
-  console.log("ping", req);
-  res.send("pong");
+  const cq = await _h.getAllCoinQueries();
+  res.send(
+    cq.map(e => {
+      console.log(e.dataValues.name);
+      return e.dataValues.name;
+    })
+  );
 };
 
 const historical = async (req, res) => {
   const { query } = req;
-  const data = await _h.getHistorical(query);
-  console.log(data);
-  res.send(data);
+  const dbName = _h.costructDBName(query);
+  const c = cache.get(dbName + "_historical");
+  if (c) return res.send({ hodl: true });
+  let dbData;
+  let cloudData;
+  try {
+    dbData = await _h.findQuery(dbName);
+  } catch (error) {
+    console.log(error);
+  }
+  if (!dbData) {
+    try {
+      cloudData = await _h.getHistorical(query);
+      const e = await _h.saveCoinQuery(
+        dbName,
+        JSON.stringify(cloudData.Data),
+        JSON.stringify(query)
+      );
+      res.send(cloudData);
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    res.send({
+      Data: JSON.parse(dbData.dataValues.data),
+      originalQuery: JSON.parse(dbData.dataValues.query),
+      lastUpdate: dbData.dataValues.updatedAt
+    });
+  }
+  cache.put(dbName + "_historical", "cached", 60 * 1000);
+};
+
+const getFromDb = async (req, res) => {
+  const { query } = req;
+  let dbData;
+  try {
+    dbData = await _h.findQuery(query.name);
+  } catch (error) {
+    console.log(error);
+  }
+  res.send({
+    Data: JSON.parse(dbData.dataValues.data),
+    originalQuery: JSON.parse(dbData.dataValues.query),
+    lastUpdate: dbData.dataValues.updatedAt
+  });
+};
+
+const refreshDB = async (req, res) => {
+  const { query } = req;
+  const dbName = _h.costructDBName(query);
+  const c = cache.get(dbName + "_refresh");
+  if (c) return res.send({ hodl: true });
+  try {
+    const cloudData = await _h.getHistorical(query);
+    const e = await _h.updateDb(
+      dbName,
+      JSON.stringify(cloudData.Data),
+      JSON.stringify(query)
+    );
+    res.send(cloudData);
+  } catch (error) {
+    console.log(error);
+  }
+  cache.put(dbName + "_refresh", "refreshed", 60 * 1000);
 };
 
 module.exports = {
   coinList,
   ping,
-  historical
+  historical,
+  getFromDb,
+  refreshDB
 };

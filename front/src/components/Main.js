@@ -3,6 +3,7 @@ import api from 'redux-rest-fetcher';
 import moment from 'moment';
 
 import Chart from './Chart';
+import Buttons from './Buttons';
 
 const Aux = props => props.children;
 
@@ -59,6 +60,11 @@ class Main extends Component {
 
   toTheMoon = () => {
     const { selectedCoin, lowDate, highDate } = this.state;
+    if (!selectedCoin) {
+      // eslint-disable-next-line no-alert
+      alert('select coin first');
+      return false;
+    }
     const ts = moment(lowDate).valueOf();
     const limit = moment(highDate).diff(moment(lowDate), 'days');
     api
@@ -79,6 +85,46 @@ class Main extends Component {
       })
       .then((j) => {
         this.setState({ coinData: j });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    return true;
+  };
+
+  execFromDB = (name) => {
+    api
+      .get_from_db({ GET: { name } })
+      .then((r) => {
+        if (r.status === 200 || r.ok) {
+          return r.json();
+        }
+        return {};
+      })
+      .then((j) => {
+        this.setState({ coinData: j });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  refresh = query => () => {
+    api
+      .historical({
+        GET: query,
+      })
+      .then((r) => {
+        if (r.status === 200 || r.ok) {
+          return r.json();
+        }
+        return [];
+      })
+      .then((j) => {
+        this.setState({ coinData: j });
+      })
+      .catch((e) => {
+        console.log(e);
       });
   };
 
@@ -89,14 +135,15 @@ class Main extends Component {
       selectedCoin,
       lowDate,
       highDate,
-      coinData: { Data = undefined },
+      coinData: { Data = null, hodl = false, originalQuery = false },
     } = this.state;
     return (
       <Aux>
-        <div>
+        <div style={{ maxWidth: '400px', margin: '0 auto' }}>
           <div>
             <input value={lowDate} type="date" onChange={this.dateLowChange} />
             <input value={highDate} type="date" onChange={this.dateHighChange} />
+            {originalQuery && <button onClick={this.refresh(originalQuery)}>Refresh</button>}
           </div>
           <select style={{ width: '100%' }} onChange={this.changeCoin} value={selectedCoin}>
             {coinList.map(e => (
@@ -109,7 +156,10 @@ class Main extends Component {
             To the moon
           </button>
         </div>
-        <Chart data={Data} />
+        {!hodl ? <Chart data={Data} /> : <span>HODL</span>}
+        <div style={{ width: '50%', margin: '0 auto' }}>
+          <Buttons exec={this.execFromDB} />
+        </div>
       </Aux>
     );
   }
