@@ -1,0 +1,11 @@
+{
+  "name": "knb",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "install": "npm install --prefix ./back && npm install --prefix ./front",
+    "echo": "npm --prefix ./back run echo && npm --prefix ./front run echo"
+  },
+  "author": "",
+  "license": "MIT"
+}
