@@ -89,7 +89,8 @@ const getAllCoinQueries = () => {
 };
 
 const updateDb = (name, data, query) => {
-  return Coins.update(data, { where: { name } });
+  console.log(name, data, query);
+  return Coins.update({ data }, { where: { name } });
 };
 
 module.exports = {

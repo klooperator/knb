@@ -5,5 +5,6 @@ router.get("/api/coin_list", resolvers.coinList);
 router.get("/api/ping", resolvers.ping);
 router.get("/api/historcal", resolvers.historical);
 router.get("/api/get_from_db", resolvers.getFromDb);
+router.get("/api/refresh_db", resolvers.refreshDB);
 
 module.exports = router;

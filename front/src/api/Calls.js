@@ -12,4 +12,7 @@ export default {
   get_from_db: {
     url: `${route}/get_from_db`,
   },
+  update_db: {
+    url: `${route}/refresh_db`,
+  },
 };

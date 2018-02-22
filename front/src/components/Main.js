@@ -113,7 +113,7 @@ class Main extends Component {
     const query = _query;
     query.force = true;
     api
-      .historical({
+      .update_db({
         GET: query,
       })
       .then((r) => {
