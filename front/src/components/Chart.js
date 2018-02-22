@@ -42,7 +42,7 @@ const Charter = (props) => {
   const {
     data, xScale, xAccessor, displayXAccessor,
   } = xScaleProvider(_data);
-  const xExtents = [xAccessor(last(data)), 1];
+  const xExtents = [xAccessor(last(data)), 0];
 
   return (
     <ChartCanvas
