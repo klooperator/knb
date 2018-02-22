@@ -43,4 +43,3 @@ server.listen(app.get("port"), () => {
     `Server listening on port: ${app.get("port")}. Env is: ${app.get("env")}`
   );
 });
-console.log(global);

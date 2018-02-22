@@ -14,12 +14,6 @@ class Buttons extends Component {
   componentDidMount() {
     api
       .ping()
-      .then(r => r.text())
-      .then((t) => {
-        console.log(t);
-      });
-    api
-      .ping()
       .then((r) => {
         if (r.status === 200 || r.ok) {
           return r.json();
@@ -36,7 +30,6 @@ class Buttons extends Component {
   };
 
   render() {
-    console.log(this);
     const { queryList } = this.state;
     return (
       <Aux>

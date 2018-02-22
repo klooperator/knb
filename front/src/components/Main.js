@@ -131,7 +131,6 @@ class Main extends Component {
   };
 
   render() {
-    console.log(this);
     const {
       coinList,
       selectedCoin,

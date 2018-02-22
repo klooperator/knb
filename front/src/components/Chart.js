@@ -31,6 +31,7 @@ const Charter = (props) => {
   const sma20 = sma()
     .options({ windowSize: 2, sourcePath: 'close' })
     .merge((d, c) => {
+      // eslint-disable-next-line no-param-reassign
       d.sma20 = c;
     })
     .stroke('#4682B4')
