@@ -32,6 +32,7 @@ const ping = async (req, res) => {
 
 const historical = async (req, res) => {
   const { query } = req;
+  let force = false;
   const dbName = _h.costructDBName(query);
   const c = cache.get(dbName + "_historical");
   if (c) return res.send({ hodl: true });
@@ -42,14 +43,21 @@ const historical = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+  if (query.force) {
+    dbData = undefined;
+    delete query.force;
+    force = true;
+  }
   if (!dbData) {
     try {
       cloudData = await _h.getHistorical(query);
-      const e = await _h.saveCoinQuery(
-        dbName,
-        JSON.stringify(cloudData.Data),
-        JSON.stringify(query)
-      );
+      if (!force) {
+        await _h.saveCoinQuery(
+          dbName,
+          JSON.stringify(cloudData.Data),
+          JSON.stringify(query)
+        );
+      }
       res.send(cloudData);
     } catch (error) {
       console.log(error);

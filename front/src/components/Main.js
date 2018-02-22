@@ -109,7 +109,9 @@ class Main extends Component {
       });
   };
 
-  refresh = query => () => {
+  refresh = _query => () => {
+    const query = _query;
+    query.force = true;
     api
       .historical({
         GET: query,

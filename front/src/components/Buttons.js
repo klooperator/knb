@@ -40,8 +40,8 @@ class Buttons extends Component {
     const { queryList } = this.state;
     return (
       <Aux>
-        {queryList.map(e => (
-          <button key={e} onClick={this.goQuery(e)}>
+        {queryList.map((e, i) => (
+          <button key={`${e}_${i + 1}`} onClick={this.goQuery(e)}>
             {e}
           </button>
         ))}

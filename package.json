@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "install": "npm install --prefix ./back && npm install --prefix ./front"
+    "install": "npm install --prefix ./back && npm install --prefix ./front",
+    "start:front": "npm run start --prefix ./front",
+    "start:back": "npm run start --prefix ./back"
   },
   "author": "",
   "license": "MIT"
