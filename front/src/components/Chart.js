@@ -30,8 +30,8 @@ const Charter = (props) => {
   const _data = formatData(initData);
   const sma20 = sma()
     .options({ windowSize: 2, sourcePath: 'close' })
+    // eslint-disable-next-line no-param-reassign
     .merge((d, c) => {
-      // eslint-disable-next-line no-param-reassign
       d.sma20 = c;
     })
     .stroke('#4682B4')
@@ -43,7 +43,7 @@ const Charter = (props) => {
     data, xScale, xAccessor, displayXAccessor,
   } = xScaleProvider(_data);
   const xExtents = [xAccessor(last(data)), 0];
-
+  sma20(data);
   return (
     <ChartCanvas
       height={500}
@@ -62,7 +62,6 @@ const Charter = (props) => {
       xScale={xScale}
       xExtents={xExtents}
       displayXAccessor={displayXAccessor}
-      style={{ maxWidth: '400px', margin: '0 auto' }}
     >
       <Chart
         id={1}
